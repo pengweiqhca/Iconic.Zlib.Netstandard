@@ -246,7 +246,7 @@ namespace Ionic.Zlib.Tests
 		[TestMethod]
 		public void zlib_Compat_decompress_wi13446()
 		{
-			var zlibbedFile = Path.Combine(TestContext.TestRunDirectory, "zlibbed.file");
+			var zlibbedFile = Path.Combine(AppContext.BaseDirectory, "zlibbed.file");
 			var streamCopy = new Action<Stream, Stream, int>((source, dest, bufferSize) =>
 			{
 				var temp = new byte[bufferSize];
