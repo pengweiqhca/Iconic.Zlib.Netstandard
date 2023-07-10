@@ -2,11 +2,11 @@
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <Authors>https://github.com/HelloKitty</Authors>
-    <PackageProjectUrl>https://github.com/HelloKitty/Iconic.Zlib.Netstandard</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/HelloKitty/Iconic.Zlib.Netstandard</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/pengweiqhca/Iconic.Zlib.Netstandard</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/pengweiqhca/Iconic.Zlib.Netstandard</PackageLicenseUrl>
     <Description>A .NETStandard port of Iconic.Zlib from DotNetZip project.</Description>
     <RepositoryType>Git</RepositoryType>
-    <RepositoryUrl>https://github.com/HelloKitty/Iconic.Zlib.Netstandard</RepositoryUrl>
+    <RepositoryUrl>https://github.com/pengweiqhca/Iconic.Zlib.Netstandard</RepositoryUrl>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\key.snk</AssemblyOriginatorKeyFile>
     <AssemblyName>Iconic.Zlib</AssemblyName>
