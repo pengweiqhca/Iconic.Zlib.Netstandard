@@ -316,10 +316,7 @@ namespace Ionic.Zlib
         /// A tuning knob to trade speed for effectiveness. This parameter is
         /// effective only when mode is <c>CompressionMode.Compress</c>.
         /// </param>
-        public ZlibStream(Stream stream, CompressionMode mode, CompressionLevel level, bool leaveOpen)
-		{
-			_baseStream = new ZlibBaseStream(stream, mode, level, ZlibStreamFlavor.ZLIB, leaveOpen);
-		}
+        public ZlibStream(Stream stream, CompressionMode mode, CompressionLevel level, bool leaveOpen) => _baseStream = new ZlibBaseStream(stream, mode, level, ZlibStreamFlavor.ZLIB, leaveOpen);
 
 		#region Zlib properties
 
@@ -369,10 +366,16 @@ namespace Ionic.Zlib
         }
 
         /// <summary> Returns the total number of bytes input so far.</summary>
-        public virtual long TotalIn => _baseStream._z.TotalBytesIn;
+        public virtual long TotalIn
+        {
+	        get => _baseStream._z.TotalBytesIn;
+        }
 
-		/// <summary> Returns the total number of bytes output so far.</summary>
-		public virtual long TotalOut => _baseStream._z.TotalBytesOut;
+        /// <summary> Returns the total number of bytes output so far.</summary>
+		public virtual long TotalOut
+        {
+	        get => _baseStream._z.TotalBytesOut;
+        }
 
 		#endregion
 
@@ -425,7 +428,10 @@ namespace Ionic.Zlib
         /// <remarks>
         /// The return value depends on whether the captive stream supports reading.
         /// </remarks>
-        public override bool CanRead => _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream._stream.CanRead;
+        public override bool CanRead
+        {
+	        get => _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream._stream.CanRead;
+        }
 
         /// <summary>
         /// Indicates whether the stream supports Seek operations.
@@ -433,7 +439,10 @@ namespace Ionic.Zlib
         /// <remarks>
         /// Always returns false.
         /// </remarks>
-        public override bool CanSeek => false;
+        public override bool CanSeek
+        {
+	        get => false;
+        }
 
         /// <summary>
         /// Indicates whether the stream can be written.
@@ -441,7 +450,10 @@ namespace Ionic.Zlib
         /// <remarks>
         /// The return value depends on whether the captive stream supports writing.
         /// </remarks>
-        public override bool CanWrite => _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream._stream.CanWrite;
+        public override bool CanWrite
+        {
+	        get => _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream._stream.CanWrite;
+        }
 
         /// <summary>
         /// Flush the stream.
@@ -455,7 +467,10 @@ namespace Ionic.Zlib
         /// <summary>
         /// Reading this property always throws a <see cref="NotSupportedException"/>.
         /// </summary>
-        public override long Length => throw new NotSupportedException();
+        public override long Length
+        {
+	        get => throw new NotSupportedException();
+        }
 
         /// <summary>
         ///   The position of the stream pointer.
@@ -472,9 +487,9 @@ namespace Ionic.Zlib
         {
             get
             {
-                if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Writer)
+                if (_baseStream._streamMode == ZlibBaseStream.StreamMode.Writer)
                     return _baseStream._z.TotalBytesOut;
-                return _baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Reader ? _baseStream._z.TotalBytesIn : 0;
+                return _baseStream._streamMode == ZlibBaseStream.StreamMode.Reader ? _baseStream._z.TotalBytesIn : 0;
             }
 
             set => throw new NotSupportedException();
@@ -533,12 +548,9 @@ namespace Ionic.Zlib
         /// </param>
         ///
         /// <returns>nothing. This method always throws.</returns>
-        public override long Seek(long offset, SeekOrigin origin)
-		{
-			throw new NotSupportedException();
-		}
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
 
-		/// <summary>
+        /// <summary>
 		/// Calling this method always throws a <see cref="NotSupportedException"/>.
 		/// </summary>
 		/// <param name="value">
@@ -687,14 +699,10 @@ namespace Ionic.Zlib
 		{
 			using (var input = new MemoryStream(compressed))
 			{
-				Stream decompressor =
-					new ZlibStream(input, CompressionMode.Decompress);
+				Stream decompressor = new ZlibStream(input, CompressionMode.Decompress);
 
 				return ZlibBaseStream.UncompressBuffer(compressed, decompressor);
 			}
 		}
-
 	}
-
-
 }

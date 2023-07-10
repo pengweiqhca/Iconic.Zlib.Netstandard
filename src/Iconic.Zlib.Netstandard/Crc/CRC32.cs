@@ -52,24 +52,27 @@ namespace Ionic.Crc
         /// <summary>
         ///   Indicates the total number of bytes applied to the CRC.
         /// </summary>
-        public long TotalBytesRead => _TotalBytesRead;
+        public long TotalBytesRead
+        {
+	        get => _TotalBytesRead;
+        }
 
         /// <summary>
         /// Indicates the current CRC for all blocks slurped in.
         /// </summary>
-        public int Crc32Result => unchecked((int)~_register);
+        public int Crc32Result
+        {
+	        get => unchecked((int)~_register);
+        }
 
         /// <summary>
         /// Returns the CRC32 for the specified stream.
         /// </summary>
         /// <param name="input">The stream over which to calculate the CRC32</param>
         /// <returns>the CRC32 calculation</returns>
-        public int GetCrc32(System.IO.Stream input)
-		{
-			return GetCrc32AndCopy(input, null);
-		}
+        public int GetCrc32(System.IO.Stream input) => GetCrc32AndCopy(input, null);
 
-		/// <summary>
+        /// <summary>
 		/// Returns the CRC32 for the specified stream, and writes the input into the
 		/// output stream.
 		/// </summary>
@@ -110,15 +113,9 @@ namespace Ionic.Crc
 		/// <param name="W">The word to start with.</param>
 		/// <param name="B">The byte to combine it with.</param>
 		/// <returns>The CRC-ized result.</returns>
-		public int ComputeCrc32(int W, byte B)
-		{
-			return _InternalComputeCrc32((uint)W, B);
-		}
+		public int ComputeCrc32(int W, byte B) => _InternalComputeCrc32((uint)W, B);
 
-		internal int _InternalComputeCrc32(uint W, byte B)
-		{
-			return (int)(crc32Table[(W ^ B) & 0xFF] ^ (W >> 8));
-		}
+		internal int _InternalComputeCrc32(uint W, byte B) => (int)(crc32Table[(W ^ B) & 0xFF] ^ (W >> 8));
 
 
 		/// <summary>
@@ -506,7 +503,7 @@ namespace Ionic.Crc
 		/// </remarks>
 		/// <param name="stream">The underlying stream</param>
 		public CrcCalculatorStream(System.IO.Stream stream)
-			: this(true, CrcCalculatorStream.UnsetLengthLimit, stream, null)
+			: this(true, UnsetLengthLimit, stream, null)
 		{
 		}
 
@@ -524,7 +521,7 @@ namespace Ionic.Crc
 		/// <param name="leaveOpen">true to leave the underlying stream
 		/// open upon close of the <c>CrcCalculatorStream</c>; false otherwise.</param>
 		public CrcCalculatorStream(System.IO.Stream stream, bool leaveOpen)
-			: this(leaveOpen, CrcCalculatorStream.UnsetLengthLimit, stream, null)
+			: this(leaveOpen, UnsetLengthLimit, stream, null)
 		{
 		}
 
@@ -622,7 +619,10 @@ namespace Ionic.Crc
         ///   This is either the total number of bytes read, or the total number of
         ///   bytes written, depending on the direction of this stream.
         /// </remarks>
-        public long TotalBytesSlurped => _Crc32.TotalBytesRead;
+        public long TotalBytesSlurped
+        {
+	        get => _Crc32.TotalBytesRead;
+        }
 
         /// <summary>
         ///   Provides the current CRC for all blocks slurped in.
@@ -634,7 +634,10 @@ namespace Ionic.Crc
         ///     get an accurate CRC for the entire stream.
         ///   </para>
         /// </remarks>
-        public int Crc => _Crc32.Crc32Result;
+        public int Crc
+        {
+	        get => _Crc32.Crc32Result;
+        }
 
         /// <summary>
         ///   Indicates whether the underlying stream will be left open when the
@@ -670,7 +673,7 @@ namespace Ionic.Crc
 			// calling ReadToEnd() on it, We can "over-read" the zip data and get a
 			// corrupt string.  The length limits that, prevents that problem.
 
-			if (_lengthLimit != CrcCalculatorStream.UnsetLengthLimit)
+			if (_lengthLimit != UnsetLengthLimit)
 			{
 				if (_Crc32.TotalBytesRead >= _lengthLimit) return 0; // EOF
                 var bytesRemaining = _lengthLimit - _Crc32.TotalBytesRead;
@@ -696,7 +699,10 @@ namespace Ionic.Crc
         /// <summary>
         /// Indicates whether the stream supports reading.
         /// </summary>
-        public override bool CanRead => _innerStream.CanRead;
+        public override bool CanRead
+        {
+	        get => _innerStream.CanRead;
+        }
 
         /// <summary>
         ///   Indicates whether the stream supports seeking.
@@ -706,12 +712,18 @@ namespace Ionic.Crc
         ///     Always returns false.
         ///   </para>
         /// </remarks>
-        public override bool CanSeek => false;
+        public override bool CanSeek
+        {
+	        get => false;
+        }
 
         /// <summary>
         /// Indicates whether the stream supports writing.
         /// </summary>
-        public override bool CanWrite => _innerStream.CanWrite;
+        public override bool CanWrite
+        {
+	        get => _innerStream.CanWrite;
+        }
 
         /// <summary>
         /// Flush the stream.
@@ -724,7 +736,10 @@ namespace Ionic.Crc
         /// <summary>
         ///   Returns the length of the underlying stream.
         /// </summary>
-        public override long Length => _lengthLimit == CrcCalculatorStream.UnsetLengthLimit ? _innerStream.Length : _lengthLimit;
+        public override long Length
+        {
+	        get => _lengthLimit == UnsetLengthLimit ? _innerStream.Length : _lengthLimit;
+        }
 
         /// <summary>
         ///   The getter for this property returns the total bytes read.
@@ -744,12 +759,9 @@ namespace Ionic.Crc
         /// <param name="offset">N/A</param>
         /// <param name="origin">N/A</param>
         /// <returns>N/A</returns>
-        public override long Seek(long offset, System.IO.SeekOrigin origin)
-		{
-			throw new NotSupportedException();
-		}
+        public override long Seek(long offset, System.IO.SeekOrigin origin) => throw new NotSupportedException();
 
-		/// <summary>
+        /// <summary>
 		/// This method always throws
 		/// <see cref="NotSupportedException"/>
 		/// </summary>

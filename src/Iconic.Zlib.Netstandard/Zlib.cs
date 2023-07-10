@@ -93,7 +93,6 @@ using Interop = System.Runtime.InteropServices;
 
 namespace Ionic.Zlib
 {
-
 	/// <summary>
 	/// Describes how to flush the current deflate operation.
 	/// </summary>
@@ -293,10 +292,7 @@ namespace Ionic.Zlib
 		/// <param name="number">Number to operate on</param>
 		/// <param name="bits">Ammount of bits to shift</param>
 		/// <returns>The resulting number from the shift operation</returns>
-		public static int URShift(int number, int bits)
-		{
-			return (int)((uint)number >> bits);
-		}
+		public static int URShift(int number, int bits) => (int)((uint)number >> bits);
 
 #if NOT
         /// <summary>
@@ -344,16 +340,10 @@ namespace Ionic.Zlib
 		}
 
 
-		internal static byte[] ToByteArray(string sourceString)
-		{
-			return System.Text.UTF8Encoding.UTF8.GetBytes(sourceString);
-		}
+		internal static byte[] ToByteArray(string sourceString) => System.Text.Encoding.UTF8.GetBytes(sourceString);
 
 
-		internal static char[] ToCharArray(byte[] byteArray)
-		{
-			return System.Text.UTF8Encoding.UTF8.GetChars(byteArray);
-		}
+		internal static char[] ToCharArray(byte[] byteArray) => System.Text.Encoding.UTF8.GetChars(byteArray);
 	}
 
 	internal static class InternalConstants
@@ -381,7 +371,7 @@ namespace Ionic.Zlib
 
 	internal sealed class StaticTree
 	{
-		internal static readonly short[] lengthAndLiteralsTreeCodes = new short[] {
+		internal static readonly short[] lengthAndLiteralsTreeCodes = {
 			12, 8, 140, 8, 76, 8, 204, 8, 44, 8, 172, 8, 108, 8, 236, 8,
 			28, 8, 156, 8, 92, 8, 220, 8, 60, 8, 188, 8, 124, 8, 252, 8,
 			 2, 8, 130, 8, 66, 8, 194, 8, 34, 8, 162, 8, 98, 8, 226, 8,
@@ -420,7 +410,7 @@ namespace Ionic.Zlib
 			 3, 8, 131, 8, 67, 8, 195, 8, 35, 8, 163, 8, 99, 8, 227, 8
 		};
 
-		internal static readonly short[] distTreeCodes = new short[] {
+		internal static readonly short[] distTreeCodes = {
 			0, 5, 16, 5, 8, 5, 24, 5, 4, 5, 20, 5, 12, 5, 28, 5,
 			2, 5, 18, 5, 10, 5, 26, 5, 6, 5, 22, 5, 14, 5, 30, 5,
 			1, 5, 17, 5, 9, 5, 25, 5, 5, 5, 21, 5, 13, 5, 29, 5,

@@ -179,7 +179,10 @@ namespace Ionic.Zlib
 		/// <summary>
 		/// The Adler32 checksum on the data transferred through the codec so far. You probably don't need to look at this.
 		/// </summary>
-		public int Adler32 => (int)_Adler32;
+		public int Adler32
+		{
+			get => (int)_Adler32;
+		}
 
 
 		/// <summary>
@@ -221,10 +224,7 @@ namespace Ionic.Zlib
 		/// It is implicitly called when you call the constructor.
 		/// </remarks>
 		/// <returns>Z_OK if everything goes well.</returns>
-		public int InitializeInflate()
-		{
-			return InitializeInflate(WindowBits);
-		}
+		public int InitializeInflate() => InitializeInflate(WindowBits);
 
 		/// <summary>
 		/// Initialize the inflation state with an explicit flag to
@@ -244,10 +244,7 @@ namespace Ionic.Zlib
 		/// pair when reading the stream of data to be inflated.</param>
 		///
 		/// <returns>Z_OK if everything goes well.</returns>
-		public int InitializeInflate(bool expectRfc1950Header)
-		{
-			return InitializeInflate(WindowBits, expectRfc1950Header);
-		}
+		public int InitializeInflate(bool expectRfc1950Header) => InitializeInflate(WindowBits, expectRfc1950Header);
 
 		/// <summary>
 		/// Initialize the ZlibCodec for inflation, with the specified number of window bits. 
@@ -351,13 +348,10 @@ namespace Ionic.Zlib
 		/// </example>
 		/// <param name="flush">The flush to use when inflating.</param>
 		/// <returns>Z_OK if everything goes well.</returns>
-		public int Inflate(FlushType flush)
-		{
-            return istate == null ? throw new ZlibException("No Inflate State!") : istate.Inflate(flush);
-        }
+		public int Inflate(FlushType flush) => istate == null ? throw new ZlibException("No Inflate State!") : istate.Inflate(flush);
 
 
-        /// <summary>
+		/// <summary>
         /// Ends an inflation session. 
         /// </summary>
         /// <remarks>
@@ -379,12 +373,9 @@ namespace Ionic.Zlib
 		/// I don't know what this does!
 		/// </summary>
 		/// <returns>Z_OK if everything goes well.</returns>
-		public int SyncInflate()
-		{
-            return istate == null ? throw new ZlibException("No Inflate State!") : istate.Sync();
-        }
+		public int SyncInflate() => istate == null ? throw new ZlibException("No Inflate State!") : istate.Sync();
 
-        /// <summary>
+		/// <summary>
         /// Initialize the ZlibCodec for deflation operation.
         /// </summary>
         /// <remarks>
@@ -424,10 +415,7 @@ namespace Ionic.Zlib
         /// </code>
         /// </example>
         /// <returns>Z_OK if all goes well. You generally don't need to check the return code.</returns>
-        public int InitializeDeflate()
-		{
-			return _InternalInitializeDeflate(true);
-		}
+        public int InitializeDeflate() => _InternalInitializeDeflate(true);
 
 		/// <summary>
 		/// Initialize the ZlibCodec for deflation operation, using the specified CompressionLevel.
@@ -577,12 +565,9 @@ namespace Ionic.Zlib
 		/// flush everything. 
 		/// </param>
 		/// <returns>Z_OK if all goes well.</returns>
-		public int Deflate(FlushType flush)
-		{
-            return dstate == null ? throw new ZlibException("No Deflate State!") : dstate.Deflate(flush);
-        }
+		public int Deflate(FlushType flush) => dstate == null ? throw new ZlibException("No Deflate State!") : dstate.Deflate(flush);
 
-        /// <summary>
+		/// <summary>
         /// End a deflation session.
         /// </summary>
         /// <remarks>
@@ -622,13 +607,10 @@ namespace Ionic.Zlib
 		/// <param name="level">the level of compression to use.</param>
 		/// <param name="strategy">the strategy to use for compression.</param>
 		/// <returns>Z_OK if all goes well.</returns>
-		public int SetDeflateParams(CompressionLevel level, CompressionStrategy strategy)
-		{
-            return dstate == null ? throw new ZlibException("No Deflate State!") : dstate.SetParams(level, strategy);
-        }
+		public int SetDeflateParams(CompressionLevel level, CompressionStrategy strategy) => dstate == null ? throw new ZlibException("No Deflate State!") : dstate.SetParams(level, strategy);
 
 
-        /// <summary>
+		/// <summary>
         /// Set the dictionary to be used for either Inflation or Deflation.
         /// </summary>
         /// <param name="dictionary">The dictionary bytes to use.</param>

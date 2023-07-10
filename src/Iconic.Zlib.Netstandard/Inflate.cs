@@ -70,8 +70,7 @@ namespace Ionic.Zlib
 		private const int MANY = 1440;
 
 		// Table for deflate from PKZIP's appnote.txt.
-		internal static readonly int[] border = new int[]
-		{ 16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15 };
+		internal static readonly int[] border = { 16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15 };
 
 		private enum InflateBlockMode
 		{
@@ -668,10 +667,7 @@ namespace Ionic.Zlib
 
 		// Returns true if inflate is currently at the end of a block generated
 		// by Z_SYNC_FLUSH or Z_FULL_FLUSH.
-		internal int SyncPoint()
-		{
-			return mode == InflateBlockMode.LENS ? 1 : 0;
-		}
+		internal int SyncPoint() => mode == InflateBlockMode.LENS ? 1 : 0;
 
 		// copy as much as possible from the sliding window to the output area
 		internal int Flush(int r)
@@ -738,7 +734,7 @@ namespace Ionic.Zlib
 	internal static class InternalInflateConstants
 	{
 		// And'ing with mask[n] masks the lower n bits
-		internal static readonly int[] InflateMask = new int[] {
+		internal static readonly int[] InflateMask = {
 			0x00000000, 0x00000001, 0x00000003, 0x00000007,
 			0x0000000f, 0x0000001f, 0x0000003f, 0x0000007f,
 			0x000000ff, 0x000001ff, 0x000003ff, 0x000007ff,
@@ -1454,10 +1450,7 @@ namespace Ionic.Zlib
 
 		public InflateManager() { }
 
-		public InflateManager(bool expectRfc1950HeaderBytes)
-		{
-			_handleRfc1950HeaderBytes = expectRfc1950HeaderBytes;
-		}
+		public InflateManager(bool expectRfc1950HeaderBytes) => _handleRfc1950HeaderBytes = expectRfc1950HeaderBytes;
 
 		internal int Reset()
 		{
@@ -1722,7 +1715,7 @@ namespace Ionic.Zlib
 		}
 
 
-		private static readonly byte[] mark = new byte[] { 0, 0, 0xff, 0xff };
+		private static readonly byte[] mark = { 0, 0, 0xff, 0xff };
 
 		internal int Sync()
 		{
@@ -1787,9 +1780,6 @@ namespace Ionic.Zlib
 		// but removes the length bytes of the resulting empty stored block. When
 		// decompressing, PPP checks that at the end of input packet, inflate is
 		// waiting for these length bytes.
-		internal int SyncPoint(ZlibCodec z)
-		{
-			return blocks.SyncPoint();
-		}
+		internal int SyncPoint(ZlibCodec z) => blocks.SyncPoint();
 	}
 }

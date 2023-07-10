@@ -124,10 +124,7 @@ namespace Ionic.Zlib
 				Flavor = flavor;
 			}
 
-			public static Config Lookup(CompressionLevel level)
-			{
-				return Table[(int)level];
-			}
+			public static Config Lookup(CompressionLevel level) => Table[(int)level];
 
 
 			static Config()
@@ -153,8 +150,7 @@ namespace Ionic.Zlib
 
 		private CompressFunc DeflateFunction;
 
-		private static readonly string[] _ErrorMessage = new string[]
-		{
+		private static readonly string[] _ErrorMessage = {
 			"need dictionary",
 			"stream end",
 			"",
@@ -1503,20 +1499,11 @@ namespace Ionic.Zlib
 		internal bool WantRfc1950HeaderBytes { get; set; } = true;
 
 
-		internal int Initialize(ZlibCodec codec, CompressionLevel level)
-		{
-			return Initialize(codec, level, ZlibConstants.WindowBitsMax);
-		}
+		internal int Initialize(ZlibCodec codec, CompressionLevel level) => Initialize(codec, level, ZlibConstants.WindowBitsMax);
 
-		internal int Initialize(ZlibCodec codec, CompressionLevel level, int bits)
-		{
-			return Initialize(codec, level, bits, MEM_LEVEL_DEFAULT, CompressionStrategy.Default);
-		}
+		internal int Initialize(ZlibCodec codec, CompressionLevel level, int bits) => Initialize(codec, level, bits, MEM_LEVEL_DEFAULT, CompressionStrategy.Default);
 
-		internal int Initialize(ZlibCodec codec, CompressionLevel level, int bits, CompressionStrategy compressionStrategy)
-		{
-			return Initialize(codec, level, bits, MEM_LEVEL_DEFAULT, compressionStrategy);
-		}
+		internal int Initialize(ZlibCodec codec, CompressionLevel level, int bits, CompressionStrategy compressionStrategy) => Initialize(codec, level, bits, MEM_LEVEL_DEFAULT, compressionStrategy);
 
 		internal int Initialize(ZlibCodec codec, CompressionLevel level, int windowBits, int memLevel, CompressionStrategy strategy)
 		{

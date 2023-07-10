@@ -214,7 +214,10 @@ namespace Ionic.Zlib
         /// <remarks>
         /// This is used for internal error checking. You probably don't need to look at this property.
         /// </remarks>
-        public int Crc32 => _Crc32;
+        public int Crc32
+        {
+	        get => _Crc32;
+        }
 
         private int _headerByteCount;
 		internal ZlibBaseStream _baseStream;
@@ -531,10 +534,7 @@ namespace Ionic.Zlib
 		/// <param name="mode">Indicates whether the GZipStream will compress or decompress.</param>
 		/// <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
 		/// <param name="level">A tuning knob to trade speed for effectiveness.</param>
-		public GZipStream(Stream stream, CompressionMode mode, CompressionLevel level, bool leaveOpen)
-		{
-			_baseStream = new ZlibBaseStream(stream, mode, level, ZlibStreamFlavor.GZIP, leaveOpen);
-		}
+		public GZipStream(Stream stream, CompressionMode mode, CompressionLevel level, bool leaveOpen) => _baseStream = new ZlibBaseStream(stream, mode, level, ZlibStreamFlavor.GZIP, leaveOpen);
 
 		#region Zlib properties
 
@@ -584,10 +584,16 @@ namespace Ionic.Zlib
 
 
         /// <summary> Returns the total number of bytes input so far.</summary>
-        virtual public long TotalIn => _baseStream._z.TotalBytesIn;
+        virtual public long TotalIn
+        {
+	        get => _baseStream._z.TotalBytesIn;
+        }
 
         /// <summary> Returns the total number of bytes output so far.</summary>
-        virtual public long TotalOut => _baseStream._z.TotalBytesOut;
+        virtual public long TotalOut
+        {
+	        get => _baseStream._z.TotalBytesOut;
+        }
 
         #endregion
 
@@ -643,7 +649,10 @@ namespace Ionic.Zlib
         /// <remarks>
         /// The return value depends on whether the captive stream supports reading.
         /// </remarks>
-        public override bool CanRead => _disposed ? throw new ObjectDisposedException("GZipStream") : _baseStream._stream.CanRead;
+        public override bool CanRead
+        {
+	        get => _disposed ? throw new ObjectDisposedException("GZipStream") : _baseStream._stream.CanRead;
+        }
 
         /// <summary>
         /// Indicates whether the stream supports Seek operations.
@@ -651,7 +660,10 @@ namespace Ionic.Zlib
         /// <remarks>
         /// Always returns false.
         /// </remarks>
-        public override bool CanSeek => false;
+        public override bool CanSeek
+        {
+	        get => false;
+        }
 
 
         /// <summary>
@@ -660,7 +672,10 @@ namespace Ionic.Zlib
         /// <remarks>
         /// The return value depends on whether the captive stream supports writing.
         /// </remarks>
-        public override bool CanWrite => _disposed ? throw new ObjectDisposedException("GZipStream") : _baseStream._stream.CanWrite;
+        public override bool CanWrite
+        {
+	        get => _disposed ? throw new ObjectDisposedException("GZipStream") : _baseStream._stream.CanWrite;
+        }
 
         /// <summary>
         /// Flush the stream.
@@ -674,7 +689,10 @@ namespace Ionic.Zlib
         /// <summary>
         /// Reading this property always throws a <see cref="NotImplementedException"/>.
         /// </summary>
-        public override long Length => throw new NotImplementedException();
+        public override long Length
+        {
+	        get => throw new NotImplementedException();
+        }
 
         /// <summary>
         ///   The position of the stream pointer.
@@ -691,9 +709,9 @@ namespace Ionic.Zlib
         {
             get
             {
-                if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Writer)
+                if (_baseStream._streamMode == ZlibBaseStream.StreamMode.Writer)
                     return _baseStream._z.TotalBytesOut + _headerByteCount;
-                return _baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Reader
+                return _baseStream._streamMode == ZlibBaseStream.StreamMode.Reader
                     ? _baseStream._z.TotalBytesIn + _baseStream._gzipHeaderByteCount
                     : 0;
             }
@@ -757,10 +775,7 @@ namespace Ionic.Zlib
 		/// <param name="offset">irrelevant; it will always throw!</param>
 		/// <param name="origin">irrelevant; it will always throw!</param>
 		/// <returns>irrelevant!</returns>
-		public override long Seek(long offset, SeekOrigin origin)
-		{
-			throw new NotImplementedException();
-		}
+		public override long Seek(long offset, SeekOrigin origin) => throw new NotImplementedException();
 
 		/// <summary>
 		///   Calling this method always throws a <see cref="NotImplementedException"/>.
@@ -796,7 +811,7 @@ namespace Ionic.Zlib
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			if (_disposed) throw new ObjectDisposedException("GZipStream");
-			if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Undefined)
+			if (_baseStream._streamMode == ZlibBaseStream.StreamMode.Undefined)
 			{
 				//Console.WriteLine("GZipStream: First write");
 				if (_baseStream._wantCompress)

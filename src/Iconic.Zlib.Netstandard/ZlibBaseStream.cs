@@ -57,7 +57,10 @@ namespace Ionic.Zlib
 		protected internal DateTime _GzipMtime;
 		protected internal int _gzipHeaderByteCount;
 
-        internal int Crc32 => crc == null ? 0 : crc.Crc32Result;
+        internal int Crc32
+        {
+	        get => crc == null ? 0 : crc.Crc32Result;
+        }
 
         public ZlibBaseStream(Stream stream,
 							  CompressionMode compressionMode,
@@ -81,7 +84,10 @@ namespace Ionic.Zlib
 		}
 
 
-        protected internal bool _wantCompress => _compressionMode == CompressionMode.Compress;
+        protected internal bool _wantCompress
+        {
+	        get => _compressionMode == CompressionMode.Compress;
+        }
 
         private ZlibCodec z
 		{
@@ -338,11 +344,8 @@ namespace Ionic.Zlib
 
 		public override Task FlushAsync(CancellationToken cancellationToken) => _stream.FlushAsync(cancellationToken);
 
-		public override long Seek(long offset, SeekOrigin origin)
-		{
-			throw new NotImplementedException();
-			//_outStream.Seek(offset, origin);
-		}
+		public override long Seek(long offset, SeekOrigin origin) => throw new NotImplementedException();
+		//_outStream.Seek(offset, origin);
 		public override void SetLength(long value)
 		{
 			_stream.SetLength(value);
@@ -651,15 +654,27 @@ namespace Ionic.Zlib
 			return rc;
 		}
 
-		public override bool CanRead => _stream.CanRead;
+		public override bool CanRead
+		{
+			get => _stream.CanRead;
+		}
 
-        public override bool CanSeek => _stream.CanSeek;
+		public override bool CanSeek
+		{
+			get => _stream.CanSeek;
+		}
 
-        public override bool CanWrite => _stream.CanWrite;
+		public override bool CanWrite
+		{
+			get => _stream.CanWrite;
+		}
 
-        public override long Length => _stream.Length;
+		public override long Length
+		{
+			get => _stream.Length;
+		}
 
-        public override long Position
+		public override long Position
         {
             get => throw new NotImplementedException();
             set => throw new NotImplementedException();
