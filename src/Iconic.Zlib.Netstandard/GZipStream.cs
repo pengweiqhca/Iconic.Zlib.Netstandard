@@ -577,7 +577,7 @@ namespace Ionic.Zlib
                 if (_baseStream._workingBuffer != null)
                     throw new ZlibException("The working buffer is already set.");
                 if (value < ZlibConstants.WorkingBufferSizeMin)
-                    throw new ZlibException(string.Format("Don't be silly. {0} bytes?? Use a bigger buffer, at least {1}.", value, ZlibConstants.WorkingBufferSizeMin));
+                    throw new ZlibException($"Don't be silly. {value} bytes?? Use a bigger buffer, at least {ZlibConstants.WorkingBufferSizeMin}.");
                 _baseStream._bufferSize = value;
             }
         }
@@ -735,7 +735,7 @@ namespace Ionic.Zlib
         public override int Read(byte[] buffer, int offset, int count)
 		{
 			if (_disposed) throw new ObjectDisposedException("GZipStream");
-			int n = _baseStream.Read(buffer, offset, count);
+			var n = _baseStream.Read(buffer, offset, count);
 
 			// Console.WriteLine("GZipStream::Read(buffer, off({0}), c({1}) = {2}", offset, count, n);
 			// Console.WriteLine( Util.FormatByteArray(buffer, offset, n) );
@@ -821,15 +821,15 @@ namespace Ionic.Zlib
 
 		private int EmitHeader()
 		{
-			byte[] commentBytes = (Comment == null) ? null : iso8859dash1.GetBytes(Comment);
-			byte[] filenameBytes = (FileName == null) ? null : iso8859dash1.GetBytes(FileName);
+			var commentBytes = (Comment == null) ? null : iso8859dash1.GetBytes(Comment);
+			var filenameBytes = (FileName == null) ? null : iso8859dash1.GetBytes(FileName);
 
-			int cbLength = (Comment == null) ? 0 : commentBytes.Length + 1;
-			int fnLength = (FileName == null) ? 0 : filenameBytes.Length + 1;
+			var cbLength = (Comment == null) ? 0 : commentBytes.Length + 1;
+			var fnLength = (FileName == null) ? 0 : filenameBytes.Length + 1;
 
-			int bufferLength = 10 + cbLength + fnLength;
-			byte[] header = new byte[bufferLength];
-			int i = 0;
+			var bufferLength = 10 + cbLength + fnLength;
+			var header = new byte[bufferLength];
+			var i = 0;
 			// ID
 			header[i++] = 0x1F;
 			header[i++] = 0x8B;
@@ -847,8 +847,8 @@ namespace Ionic.Zlib
 
 			// mtime
 			if (!LastModified.HasValue) LastModified = DateTime.Now;
-            TimeSpan delta = LastModified.Value - _unixEpoch;
-            int timet = (int)delta.TotalSeconds;
+            var delta = LastModified.Value - _unixEpoch;
+            var timet = (int)delta.TotalSeconds;
 			Array.Copy(BitConverter.GetBytes(timet), 0, header, i, 4);
 			i += 4;
 

@@ -83,11 +83,11 @@ namespace Ionic.Crc
 
 			unchecked
 			{
-				byte[] buffer = new byte[BUFFER_SIZE];
-				int readSize = BUFFER_SIZE;
+				var buffer = new byte[BUFFER_SIZE];
+				var readSize = BUFFER_SIZE;
 
 				_TotalBytesRead = 0;
-				int count = input.Read(buffer, 0, readSize);
+				var count = input.Read(buffer, 0, readSize);
 				output?.Write(buffer, 0, count);
 				_TotalBytesRead += count;
 				while (count > 0)
@@ -134,18 +134,18 @@ namespace Ionic.Crc
 				throw new Exception("The data buffer must not be null.");
 
 			// bzip algorithm
-			for (int i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
 			{
-				int x = offset + i;
-				byte b = block[x];
+				var x = offset + i;
+				var b = block[x];
 				if (reverseBits)
 				{
-                    uint temp = (_register >> 24) ^ b;
+                    var temp = (_register >> 24) ^ b;
 					_register = (_register << 8) ^ crc32Table[temp];
 				}
 				else
 				{
-                    uint temp = (_register & 0x000000FF) ^ b;
+                    var temp = (_register & 0x000000FF) ^ b;
 					_register = (_register >> 8) ^ crc32Table[temp];
 				}
 			}
@@ -161,12 +161,12 @@ namespace Ionic.Crc
 		{
 			if (reverseBits)
 			{
-                uint temp = (_register >> 24) ^ b;
+                var temp = (_register >> 24) ^ b;
 				_register = (_register << 8) ^ crc32Table[temp];
 			}
 			else
 			{
-                uint temp = (_register & 0x000000FF) ^ b;
+                var temp = (_register & 0x000000FF) ^ b;
 				_register = (_register >> 8) ^ crc32Table[temp];
 			}
 		}
@@ -191,14 +191,14 @@ namespace Ionic.Crc
 			{
 				if (reverseBits)
 				{
-					uint temp = (_register >> 24) ^ b;
+					var temp = (_register >> 24) ^ b;
 					_register = (_register << 8) ^ crc32Table[(temp >= 0)
 															  ? temp
 															  : (temp + 256)];
 				}
 				else
 				{
-                    uint temp = (_register & 0x000000FF) ^ b;
+                    var temp = (_register & 0x000000FF) ^ b;
 					_register = (_register >> 8) ^ crc32Table[(temp >= 0)
 															  ? temp
 															  : (temp + 256)];
@@ -213,7 +213,7 @@ namespace Ionic.Crc
 		{
 			unchecked
 			{
-				uint ret = data;
+				var ret = data;
 				ret = (ret & 0x55555555) << 1 | (ret >> 1) & 0x55555555;
 				ret = (ret & 0x33333333) << 2 | (ret >> 2) & 0x33333333;
 				ret = (ret & 0x0F0F0F0F) << 4 | (ret >> 4) & 0x0F0F0F0F;
@@ -226,10 +226,10 @@ namespace Ionic.Crc
 		{
 			unchecked
 			{
-				uint u = (uint)data * 0x00020202;
+				var u = (uint)data * 0x00020202;
 				uint m = 0x01044010;
-				uint s = u & m;
-				uint t = (u << 2) & (m << 1);
+				var s = u & m;
+				var t = (u << 2) & (m << 1);
 				return (byte)((0x01001001 * (s + t)) >> 24);
 			}
 		}
@@ -290,7 +290,7 @@ namespace Ionic.Crc
 		private uint gf2_matrix_times(uint[] matrix, uint vec)
 		{
 			uint sum = 0;
-			int i = 0;
+			var i = 0;
 			while (vec != 0)
 			{
 				if ((vec & 0x01) == 0x01)
@@ -303,7 +303,7 @@ namespace Ionic.Crc
 
 		private void gf2_matrix_square(uint[] square, uint[] mat)
 		{
-			for (int i = 0; i < 32; i++)
+			for (var i = 0; i < 32; i++)
 				square[i] = gf2_matrix_times(mat, mat[i]);
 		}
 
@@ -322,19 +322,19 @@ namespace Ionic.Crc
 		/// <param name="length">the length of data the CRC value was calculated on</param>
 		public void Combine(int crc, int length)
 		{
-			uint[] even = new uint[32];     // even-power-of-two zeros operator
-			uint[] odd = new uint[32];      // odd-power-of-two zeros operator
+			var even = new uint[32];     // even-power-of-two zeros operator
+			var odd = new uint[32];      // odd-power-of-two zeros operator
 
 			if (length == 0)
 				return;
 
-			uint crc1 = ~_register;
-			uint crc2 = (uint)crc;
+			var crc1 = ~_register;
+			var crc2 = (uint)crc;
 
 			// put operator for one zero bit in odd
 			odd[0] = dwPolynomial;  // the CRC-32 polynomial
 			uint row = 1;
-			for (int i = 1; i < 32; i++)
+			for (var i = 1; i < 32; i++)
 			{
 				odd[i] = row;
 				row <<= 1;
@@ -346,7 +346,7 @@ namespace Ionic.Crc
 			// put operator for four zero bits in odd
 			gf2_matrix_square(odd, even);
 
-			uint len2 = (uint)length;
+			var len2 = (uint)length;
 
 			// apply len2 zeros to crc1 (first square will put the operator for one
 			// zero byte, eight zero bits, in even)
@@ -660,7 +660,7 @@ namespace Ionic.Crc
         /// <returns>the number of bytes actually read</returns>
         public override int Read(byte[] buffer, int offset, int count)
 		{
-			int bytesToRead = count;
+			var bytesToRead = count;
 
 			// Need to limit the # of bytes returned, if the stream is intended to have
 			// a definite length.  This is especially useful when returning a stream for
@@ -673,10 +673,10 @@ namespace Ionic.Crc
 			if (_lengthLimit != CrcCalculatorStream.UnsetLengthLimit)
 			{
 				if (_Crc32.TotalBytesRead >= _lengthLimit) return 0; // EOF
-                long bytesRemaining = _lengthLimit - _Crc32.TotalBytesRead;
+                var bytesRemaining = _lengthLimit - _Crc32.TotalBytesRead;
 				if (bytesRemaining < count) bytesToRead = (int)bytesRemaining;
 			}
-			int n = _innerStream.Read(buffer, offset, bytesToRead);
+			var n = _innerStream.Read(buffer, offset, bytesToRead);
 			if (n > 0) _Crc32.SlurpBlock(buffer, offset, n);
 			return n;
 		}
