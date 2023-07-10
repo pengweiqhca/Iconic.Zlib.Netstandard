@@ -79,7 +79,7 @@ namespace Ionic.Zlib
 	/// href="http://www.ietf.org/rfc/rfc1950.txt">RFC 1950 - ZLIB</see> and <see
 	/// href="http://www.ietf.org/rfc/rfc1951.txt">RFC 1951 - DEFLATE</see>.
 	/// </remarks>
-	[Interop.GuidAttribute("ebc25cf6-9120-4283-b972-0e5520d0000D")]
+	[Interop.Guid("ebc25cf6-9120-4283-b972-0e5520d0000D")]
 	[Interop.ComVisible(true)]
 #if !NETCF
 	[Interop.ClassInterface(Interop.ClassInterfaceType.AutoDispatch)]
@@ -137,7 +137,7 @@ namespace Ionic.Zlib
 		/// <summary>
 		/// used for diagnostics, when something goes wrong!
 		/// </summary>
-		public System.String Message;
+		public string Message;
 
 		internal DeflateManager dstate;
 		internal InflateManager istate;
@@ -223,7 +223,7 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if everything goes well.</returns>
 		public int InitializeInflate()
 		{
-			return InitializeInflate(this.WindowBits);
+			return InitializeInflate(WindowBits);
 		}
 
 		/// <summary>
@@ -246,7 +246,7 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if everything goes well.</returns>
 		public int InitializeInflate(bool expectRfc1950Header)
 		{
-			return InitializeInflate(this.WindowBits, expectRfc1950Header);
+			return InitializeInflate(WindowBits, expectRfc1950Header);
 		}
 
 		/// <summary>
@@ -257,7 +257,7 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if all goes well.</returns>
 		public int InitializeInflate(int windowBits)
 		{
-			this.WindowBits = windowBits;
+			WindowBits = windowBits;
 			return InitializeInflate(windowBits, true);
 		}
 
@@ -282,7 +282,7 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if everything goes well.</returns>
 		public int InitializeInflate(int windowBits, bool expectRfc1950Header)
 		{
-			this.WindowBits = windowBits;
+			WindowBits = windowBits;
 			if (dstate != null) throw new ZlibException("You may not call InitializeInflate() after calling InitializeDeflate().");
 			istate = new InflateManager(expectRfc1950Header);
 			return istate.Initialize(this, windowBits);
@@ -353,22 +353,20 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if everything goes well.</returns>
 		public int Inflate(FlushType flush)
 		{
-			if (istate == null)
-				throw new ZlibException("No Inflate State!");
-			return istate.Inflate(flush);
-		}
+            return istate == null ? throw new ZlibException("No Inflate State!") : istate.Inflate(flush);
+        }
 
 
-		/// <summary>
-		/// Ends an inflation session. 
-		/// </summary>
-		/// <remarks>
-		/// Call this after successively calling Inflate().  This will cause all buffers to be flushed. 
-		/// After calling this you cannot call Inflate() without a intervening call to one of the
-		/// InitializeInflate() overloads.
-		/// </remarks>
-		/// <returns>Z_OK if everything goes well.</returns>
-		public int EndInflate()
+        /// <summary>
+        /// Ends an inflation session. 
+        /// </summary>
+        /// <remarks>
+        /// Call this after successively calling Inflate().  This will cause all buffers to be flushed. 
+        /// After calling this you cannot call Inflate() without a intervening call to one of the
+        /// InitializeInflate() overloads.
+        /// </remarks>
+        /// <returns>Z_OK if everything goes well.</returns>
+        public int EndInflate()
 		{
 			if (istate == null)
 				throw new ZlibException("No Inflate State!");
@@ -383,52 +381,50 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if everything goes well.</returns>
 		public int SyncInflate()
 		{
-			if (istate == null)
-				throw new ZlibException("No Inflate State!");
-			return istate.Sync();
-		}
+            return istate == null ? throw new ZlibException("No Inflate State!") : istate.Sync();
+        }
 
-		/// <summary>
-		/// Initialize the ZlibCodec for deflation operation.
-		/// </summary>
-		/// <remarks>
-		/// The codec will use the MAX window bits and the default level of compression.
-		/// </remarks>
-		/// <example>
-		/// <code>
-		///  int bufferSize = 40000;
-		///  byte[] CompressedBytes = new byte[bufferSize];
-		///  byte[] DecompressedBytes = new byte[bufferSize];
-		///  
-		///  ZlibCodec compressor = new ZlibCodec();
-		///  
-		///  compressor.InitializeDeflate(CompressionLevel.Default);
-		///  
-		///  compressor.InputBuffer = System.Text.ASCIIEncoding.ASCII.GetBytes(TextToCompress);
-		///  compressor.NextIn = 0;
-		///  compressor.AvailableBytesIn = compressor.InputBuffer.Length;
-		///  
-		///  compressor.OutputBuffer = CompressedBytes;
-		///  compressor.NextOut = 0;
-		///  compressor.AvailableBytesOut = CompressedBytes.Length;
-		///  
-		///  while (compressor.TotalBytesIn != TextToCompress.Length &amp;&amp; compressor.TotalBytesOut &lt; bufferSize)
-		///  {
-		///    compressor.Deflate(FlushType.None);
-		///  }
-		///  
-		///  while (true)
-		///  {
-		///    int rc= compressor.Deflate(FlushType.Finish);
-		///    if (rc == ZlibConstants.Z_STREAM_END) break;
-		///  }
-		///  
-		///  compressor.EndDeflate();
-		///   
-		/// </code>
-		/// </example>
-		/// <returns>Z_OK if all goes well. You generally don't need to check the return code.</returns>
-		public int InitializeDeflate()
+        /// <summary>
+        /// Initialize the ZlibCodec for deflation operation.
+        /// </summary>
+        /// <remarks>
+        /// The codec will use the MAX window bits and the default level of compression.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        ///  int bufferSize = 40000;
+        ///  byte[] CompressedBytes = new byte[bufferSize];
+        ///  byte[] DecompressedBytes = new byte[bufferSize];
+        ///  
+        ///  ZlibCodec compressor = new ZlibCodec();
+        ///  
+        ///  compressor.InitializeDeflate(CompressionLevel.Default);
+        ///  
+        ///  compressor.InputBuffer = System.Text.ASCIIEncoding.ASCII.GetBytes(TextToCompress);
+        ///  compressor.NextIn = 0;
+        ///  compressor.AvailableBytesIn = compressor.InputBuffer.Length;
+        ///  
+        ///  compressor.OutputBuffer = CompressedBytes;
+        ///  compressor.NextOut = 0;
+        ///  compressor.AvailableBytesOut = CompressedBytes.Length;
+        ///  
+        ///  while (compressor.TotalBytesIn != TextToCompress.Length &amp;&amp; compressor.TotalBytesOut &lt; bufferSize)
+        ///  {
+        ///    compressor.Deflate(FlushType.None);
+        ///  }
+        ///  
+        ///  while (true)
+        ///  {
+        ///    int rc= compressor.Deflate(FlushType.Finish);
+        ///    if (rc == ZlibConstants.Z_STREAM_END) break;
+        ///  }
+        ///  
+        ///  compressor.EndDeflate();
+        ///   
+        /// </code>
+        /// </example>
+        /// <returns>Z_OK if all goes well. You generally don't need to check the return code.</returns>
+        public int InitializeDeflate()
 		{
 			return _InternalInitializeDeflate(true);
 		}
@@ -444,7 +440,7 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if all goes well.</returns>
 		public int InitializeDeflate(CompressionLevel level)
 		{
-			this.CompressLevel = level;
+			CompressLevel = level;
 			return _InternalInitializeDeflate(true);
 		}
 
@@ -465,7 +461,7 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if all goes well.</returns>
 		public int InitializeDeflate(CompressionLevel level, bool wantRfc1950Header)
 		{
-			this.CompressLevel = level;
+			CompressLevel = level;
 			return _InternalInitializeDeflate(wantRfc1950Header);
 		}
 
@@ -482,8 +478,8 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if all goes well.</returns>
 		public int InitializeDeflate(CompressionLevel level, int bits)
 		{
-			this.CompressLevel = level;
-			this.WindowBits = bits;
+			CompressLevel = level;
+			WindowBits = bits;
 			return _InternalInitializeDeflate(true);
 		}
 
@@ -499,8 +495,8 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if all goes well.</returns>
 		public int InitializeDeflate(CompressionLevel level, int bits, bool wantRfc1950Header)
 		{
-			this.CompressLevel = level;
-			this.WindowBits = bits;
+			CompressLevel = level;
+			WindowBits = bits;
 			return _InternalInitializeDeflate(wantRfc1950Header);
 		}
 
@@ -510,7 +506,7 @@ namespace Ionic.Zlib
 			dstate = new DeflateManager();
 			dstate.WantRfc1950HeaderBytes = wantRfc1950Header;
 
-			return dstate.Initialize(this, this.CompressLevel, this.WindowBits, this.Strategy);
+			return dstate.Initialize(this, CompressLevel, WindowBits, Strategy);
 		}
 
 		/// <summary>
@@ -583,19 +579,17 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if all goes well.</returns>
 		public int Deflate(FlushType flush)
 		{
-			if (dstate == null)
-				throw new ZlibException("No Deflate State!");
-			return dstate.Deflate(flush);
-		}
+            return dstate == null ? throw new ZlibException("No Deflate State!") : dstate.Deflate(flush);
+        }
 
-		/// <summary>
-		/// End a deflation session.
-		/// </summary>
-		/// <remarks>
-		/// Call this after making a series of one or more calls to Deflate(). All buffers are flushed.
-		/// </remarks>
-		/// <returns>Z_OK if all goes well.</returns>
-		public int EndDeflate()
+        /// <summary>
+        /// End a deflation session.
+        /// </summary>
+        /// <remarks>
+        /// Call this after making a series of one or more calls to Deflate(). All buffers are flushed.
+        /// </remarks>
+        /// <returns>Z_OK if all goes well.</returns>
+        public int EndDeflate()
 		{
 			if (dstate == null)
 				throw new ZlibException("No Deflate State!");
@@ -630,33 +624,28 @@ namespace Ionic.Zlib
 		/// <returns>Z_OK if all goes well.</returns>
 		public int SetDeflateParams(CompressionLevel level, CompressionStrategy strategy)
 		{
-			if (dstate == null)
-				throw new ZlibException("No Deflate State!");
-			return dstate.SetParams(level, strategy);
-		}
+            return dstate == null ? throw new ZlibException("No Deflate State!") : dstate.SetParams(level, strategy);
+        }
 
 
-		/// <summary>
-		/// Set the dictionary to be used for either Inflation or Deflation.
-		/// </summary>
-		/// <param name="dictionary">The dictionary bytes to use.</param>
-		/// <returns>Z_OK if all goes well.</returns>
-		public int SetDictionary(byte[] dictionary)
+        /// <summary>
+        /// Set the dictionary to be used for either Inflation or Deflation.
+        /// </summary>
+        /// <param name="dictionary">The dictionary bytes to use.</param>
+        /// <returns>Z_OK if all goes well.</returns>
+        public int SetDictionary(byte[] dictionary)
 		{
 			if (istate != null)
 				return istate.SetDictionary(dictionary);
 
-			if (dstate != null)
-				return dstate.SetDictionary(dictionary);
+            return dstate != null ? dstate.SetDictionary(dictionary) : throw new ZlibException("No Inflate or Deflate state!");
+        }
 
-			throw new ZlibException("No Inflate or Deflate state!");
-		}
-
-		// Flush as much pending output as possible. All deflate() output goes
-		// through this function so some applications may wish to modify it
-		// to avoid allocating a large strm->next_out buffer and copying into it.
-		// (See also read_buf()).
-		internal void flush_pending()
+        // Flush as much pending output as possible. All deflate() output goes
+        // through this function so some applications may wish to modify it
+        // to avoid allocating a large strm->next_out buffer and copying into it.
+        // (See also read_buf()).
+        internal void flush_pending()
 		{
 			int len = dstate.pendingCount;
 
@@ -667,10 +656,10 @@ namespace Ionic.Zlib
 
 			if (dstate.pending.Length <= dstate.nextPending ||
 				OutputBuffer.Length <= NextOut ||
-				dstate.pending.Length < (dstate.nextPending + len) ||
-				OutputBuffer.Length < (NextOut + len))
+				dstate.pending.Length < dstate.nextPending + len ||
+				OutputBuffer.Length < NextOut + len)
 			{
-				throw new ZlibException(String.Format("Invalid State. (pending.Length={0}, pendingCount={1})",
+				throw new ZlibException(string.Format("Invalid State. (pending.Length={0}, pendingCount={1})",
 					dstate.pending.Length, dstate.pendingCount));
 			}
 

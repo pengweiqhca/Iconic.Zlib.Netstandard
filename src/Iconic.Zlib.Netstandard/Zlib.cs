@@ -262,9 +262,9 @@ namespace Ionic.Zlib
 	/// <summary>
 	/// A general purpose exception class for exceptions in the Zlib library.
 	/// </summary>
-	[Interop.GuidAttribute("ebc25cf6-9120-4283-b972-0e5520d0000E")]
-	public class ZlibException : System.Exception
-	{
+	[Interop.Guid("ebc25cf6-9120-4283-b972-0e5520d0000E")]
+	public class ZlibException : Exception
+    {
 		/// <summary>
 		/// The ZlibException class captures exception information generated
 		/// by the Zlib library.
@@ -278,7 +278,7 @@ namespace Ionic.Zlib
 		/// This ctor collects a message attached to the exception.
 		/// </summary>
 		/// <param name="s">the message for the exception.</param>
-		public ZlibException(System.String s)
+		public ZlibException(string s)
 			: base(s)
 		{
 		}
@@ -326,7 +326,7 @@ namespace Ionic.Zlib
 		///   count depending on the data available in the source TextReader. Returns -1
 		///   if the end of the stream is reached.
 		/// </returns>
-		public static System.Int32 ReadInput(System.IO.TextReader sourceTextReader, byte[] target, int start, int count)
+		public static int ReadInput(System.IO.TextReader sourceTextReader, byte[] target, int start, int count)
 		{
 			// Returns 0 bytes if not enough space in target
 			if (target.Length == 0) return 0;
@@ -344,7 +344,7 @@ namespace Ionic.Zlib
 		}
 
 
-		internal static byte[] ToByteArray(System.String sourceString)
+		internal static byte[] ToByteArray(string sourceString)
 		{
 			return System.Text.UTF8Encoding.UTF8.GetBytes(sourceString);
 		}
@@ -363,7 +363,7 @@ namespace Ionic.Zlib
 		internal static readonly int D_CODES = 30;
 		internal static readonly int LITERALS = 256;
 		internal static readonly int LENGTH_CODES = 29;
-		internal static readonly int L_CODES = (LITERALS + 1 + LENGTH_CODES);
+		internal static readonly int L_CODES = LITERALS + 1 + LENGTH_CODES;
 
 		// Bit length codes must not exceed MAX_BL_BITS bits
 		internal static readonly int MAX_BL_BITS = 7;

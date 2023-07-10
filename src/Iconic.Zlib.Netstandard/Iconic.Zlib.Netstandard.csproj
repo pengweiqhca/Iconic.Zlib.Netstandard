@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net40;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <Authors>https://github.com/HelloKitty</Authors>
     <PackageProjectUrl>https://github.com/HelloKitty/Iconic.Zlib.Netstandard</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/HelloKitty/Iconic.Zlib.Netstandard</PackageLicenseUrl>

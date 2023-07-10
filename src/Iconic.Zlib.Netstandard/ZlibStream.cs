@@ -31,45 +31,45 @@ using System.IO;
 namespace Ionic.Zlib
 {
 
-	/// <summary>
-	/// Represents a Zlib stream for compression or decompression.
-	/// </summary>
-	/// <remarks>
-	///
-	/// <para>
-	/// The ZlibStream is a <see
-	/// href="http://en.wikipedia.org/wiki/Decorator_pattern">Decorator</see> on a <see
-	/// cref="System.IO.Stream"/>.  It adds ZLIB compression or decompression to any
-	/// stream.
-	/// </para>
-	///
-	/// <para> Using this stream, applications can compress or decompress data via
-	/// stream <c>Read()</c> and <c>Write()</c> operations.  Either compresssion or
-	/// decompression can occur through either reading or writing. The compression
-	/// format used is ZLIB, which is documented in <see
-	/// href="http://www.ietf.org/rfc/rfc1950.txt">IETF RFC 1950</see>, "ZLIB Compressed
-	/// Data Format Specification version 3.3". This implementation of ZLIB always uses
-	/// DEFLATE as the compression method.  (see <see
-	/// href="http://www.ietf.org/rfc/rfc1951.txt">IETF RFC 1951</see>, "DEFLATE
-	/// Compressed Data Format Specification version 1.3.") </para>
-	///
-	/// <para>
-	/// The ZLIB format allows for varying compression methods, window sizes, and dictionaries.
-	/// This implementation always uses the DEFLATE compression method, a preset dictionary,
-	/// and 15 window bits by default.
-	/// </para>
-	///
-	/// <para>
-	/// This class is similar to <see cref="DeflateStream"/>, except that it adds the
-	/// RFC1950 header and trailer bytes to a compressed stream when compressing, or expects
-	/// the RFC1950 header and trailer bytes when decompressing.  It is also similar to the
-	/// <see cref="GZipStream"/>.
-	/// </para>
-	/// </remarks>
-	/// <seealso cref="DeflateStream" />
-	/// <seealso cref="GZipStream" />
-	public class ZlibStream : System.IO.Stream
-	{
+    /// <summary>
+    /// Represents a Zlib stream for compression or decompression.
+    /// </summary>
+    /// <remarks>
+    ///
+    /// <para>
+    /// The ZlibStream is a <see
+    /// href="http://en.wikipedia.org/wiki/Decorator_pattern">Decorator</see> on a <see
+    /// cref="Stream"/>.  It adds ZLIB compression or decompression to any
+    /// stream.
+    /// </para>
+    ///
+    /// <para> Using this stream, applications can compress or decompress data via
+    /// stream <c>Read()</c> and <c>Write()</c> operations.  Either compresssion or
+    /// decompression can occur through either reading or writing. The compression
+    /// format used is ZLIB, which is documented in <see
+    /// href="http://www.ietf.org/rfc/rfc1950.txt">IETF RFC 1950</see>, "ZLIB Compressed
+    /// Data Format Specification version 3.3". This implementation of ZLIB always uses
+    /// DEFLATE as the compression method.  (see <see
+    /// href="http://www.ietf.org/rfc/rfc1951.txt">IETF RFC 1951</see>, "DEFLATE
+    /// Compressed Data Format Specification version 1.3.") </para>
+    ///
+    /// <para>
+    /// The ZLIB format allows for varying compression methods, window sizes, and dictionaries.
+    /// This implementation always uses the DEFLATE compression method, a preset dictionary,
+    /// and 15 window bits by default.
+    /// </para>
+    ///
+    /// <para>
+    /// This class is similar to <see cref="DeflateStream"/>, except that it adds the
+    /// RFC1950 header and trailer bytes to a compressed stream when compressing, or expects
+    /// the RFC1950 header and trailer bytes when decompressing.  It is also similar to the
+    /// <see cref="GZipStream"/>.
+    /// </para>
+    /// </remarks>
+    /// <seealso cref="DeflateStream" />
+    /// <seealso cref="GZipStream" />
+    public class ZlibStream : Stream
+    {
 		internal ZlibBaseStream _baseStream;
 		bool _disposed;
 
@@ -126,7 +126,7 @@ namespace Ionic.Zlib
 		///
 		/// <param name="stream">The stream which will be read or written.</param>
 		/// <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
-		public ZlibStream(System.IO.Stream stream, CompressionMode mode)
+		public ZlibStream(Stream stream, CompressionMode mode)
 			: this(stream, mode, CompressionLevel.Default, false)
 		{
 		}
@@ -190,132 +190,132 @@ namespace Ionic.Zlib
 		/// <param name="stream">The stream to be read or written while deflating or inflating.</param>
 		/// <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
 		/// <param name="level">A tuning knob to trade speed for effectiveness.</param>
-		public ZlibStream(System.IO.Stream stream, CompressionMode mode, CompressionLevel level)
+		public ZlibStream(Stream stream, CompressionMode mode, CompressionLevel level)
 			: this(stream, mode, level, false)
 		{
 		}
 
-		/// <summary>
-		///   Create a <c>ZlibStream</c> using the specified <c>CompressionMode</c>, and
-		///   explicitly specify whether the captive stream should be left open after
-		///   Deflation or Inflation.
-		/// </summary>
-		///
-		/// <remarks>
-		///
-		/// <para>
-		///   When mode is <c>CompressionMode.Compress</c>, the <c>ZlibStream</c> will use
-		///   the default compression level.
-		/// </para>
-		///
-		/// <para>
-		///   This constructor allows the application to request that the captive stream
-		///   remain open after the deflation or inflation occurs.  By default, after
-		///   <c>Close()</c> is called on the stream, the captive stream is also
-		///   closed. In some cases this is not desired, for example if the stream is a
-		///   <see cref="System.IO.MemoryStream"/> that will be re-read after
-		///   compression.  Specify true for the <paramref name="leaveOpen"/> parameter to leave the stream
-		///   open.
-		/// </para>
-		///
-		/// <para>
-		/// See the other overloads of this constructor for example code.
-		/// </para>
-		///
-		/// </remarks>
-		///
-		/// <param name="stream">The stream which will be read or written. This is called the
-		/// "captive" stream in other places in this documentation.</param>
-		/// <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
-		/// <param name="leaveOpen">true if the application would like the stream to remain
-		/// open after inflation/deflation.</param>
-		public ZlibStream(System.IO.Stream stream, CompressionMode mode, bool leaveOpen)
+        /// <summary>
+        ///   Create a <c>ZlibStream</c> using the specified <c>CompressionMode</c>, and
+        ///   explicitly specify whether the captive stream should be left open after
+        ///   Deflation or Inflation.
+        /// </summary>
+        ///
+        /// <remarks>
+        ///
+        /// <para>
+        ///   When mode is <c>CompressionMode.Compress</c>, the <c>ZlibStream</c> will use
+        ///   the default compression level.
+        /// </para>
+        ///
+        /// <para>
+        ///   This constructor allows the application to request that the captive stream
+        ///   remain open after the deflation or inflation occurs.  By default, after
+        ///   <c>Close()</c> is called on the stream, the captive stream is also
+        ///   closed. In some cases this is not desired, for example if the stream is a
+        ///   <see cref="MemoryStream"/> that will be re-read after
+        ///   compression.  Specify true for the <paramref name="leaveOpen"/> parameter to leave the stream
+        ///   open.
+        /// </para>
+        ///
+        /// <para>
+        /// See the other overloads of this constructor for example code.
+        /// </para>
+        ///
+        /// </remarks>
+        ///
+        /// <param name="stream">The stream which will be read or written. This is called the
+        /// "captive" stream in other places in this documentation.</param>
+        /// <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+        /// <param name="leaveOpen">true if the application would like the stream to remain
+        /// open after inflation/deflation.</param>
+        public ZlibStream(Stream stream, CompressionMode mode, bool leaveOpen)
 			: this(stream, mode, CompressionLevel.Default, leaveOpen)
 		{
 		}
 
-		/// <summary>
-		///   Create a <c>ZlibStream</c> using the specified <c>CompressionMode</c>
-		///   and the specified <c>CompressionLevel</c>, and explicitly specify
-		///   whether the stream should be left open after Deflation or Inflation.
-		/// </summary>
-		///
-		/// <remarks>
-		///
-		/// <para>
-		///   This constructor allows the application to request that the captive
-		///   stream remain open after the deflation or inflation occurs.  By
-		///   default, after <c>Close()</c> is called on the stream, the captive
-		///   stream is also closed. In some cases this is not desired, for example
-		///   if the stream is a <see cref="System.IO.MemoryStream"/> that will be
-		///   re-read after compression.  Specify true for the <paramref
-		///   name="leaveOpen"/> parameter to leave the stream open.
-		/// </para>
-		///
-		/// <para>
-		///   When mode is <c>CompressionMode.Decompress</c>, the level parameter is
-		///   ignored.
-		/// </para>
-		///
-		/// </remarks>
-		///
-		/// <example>
-		///
-		/// This example shows how to use a ZlibStream to compress the data from a file,
-		/// and store the result into another file. The filestream remains open to allow
-		/// additional data to be written to it.
-		///
-		/// <code>
-		/// using (var output = System.IO.File.Create(fileToCompress + ".zlib"))
-		/// {
-		///     using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
-		///     {
-		///         using (Stream compressor = new ZlibStream(output, CompressionMode.Compress, CompressionLevel.BestCompression, true))
-		///         {
-		///             byte[] buffer = new byte[WORKING_BUFFER_SIZE];
-		///             int n;
-		///             while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
-		///             {
-		///                 compressor.Write(buffer, 0, n);
-		///             }
-		///         }
-		///     }
-		///     // can write additional data to the output stream here
-		/// }
-		/// </code>
-		/// <code lang="VB">
-		/// Using output As FileStream = File.Create(fileToCompress &amp; ".zlib")
-		///     Using input As Stream = File.OpenRead(fileToCompress)
-		///         Using compressor As Stream = New ZlibStream(output, CompressionMode.Compress, CompressionLevel.BestCompression, True)
-		///             Dim buffer As Byte() = New Byte(4096) {}
-		///             Dim n As Integer = -1
-		///             Do While (n &lt;&gt; 0)
-		///                 If (n &gt; 0) Then
-		///                     compressor.Write(buffer, 0, n)
-		///                 End If
-		///                 n = input.Read(buffer, 0, buffer.Length)
-		///             Loop
-		///         End Using
-		///     End Using
-		///     ' can write additional data to the output stream here.
-		/// End Using
-		/// </code>
-		/// </example>
-		///
-		/// <param name="stream">The stream which will be read or written.</param>
-		///
-		/// <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
-		///
-		/// <param name="leaveOpen">
-		/// true if the application would like the stream to remain open after
-		/// inflation/deflation.
-		/// </param>
-		///
-		/// <param name="level">
-		/// A tuning knob to trade speed for effectiveness. This parameter is
-		/// effective only when mode is <c>CompressionMode.Compress</c>.
-		/// </param>
-		public ZlibStream(System.IO.Stream stream, CompressionMode mode, CompressionLevel level, bool leaveOpen)
+        /// <summary>
+        ///   Create a <c>ZlibStream</c> using the specified <c>CompressionMode</c>
+        ///   and the specified <c>CompressionLevel</c>, and explicitly specify
+        ///   whether the stream should be left open after Deflation or Inflation.
+        /// </summary>
+        ///
+        /// <remarks>
+        ///
+        /// <para>
+        ///   This constructor allows the application to request that the captive
+        ///   stream remain open after the deflation or inflation occurs.  By
+        ///   default, after <c>Close()</c> is called on the stream, the captive
+        ///   stream is also closed. In some cases this is not desired, for example
+        ///   if the stream is a <see cref="MemoryStream"/> that will be
+        ///   re-read after compression.  Specify true for the <paramref
+        ///   name="leaveOpen"/> parameter to leave the stream open.
+        /// </para>
+        ///
+        /// <para>
+        ///   When mode is <c>CompressionMode.Decompress</c>, the level parameter is
+        ///   ignored.
+        /// </para>
+        ///
+        /// </remarks>
+        ///
+        /// <example>
+        ///
+        /// This example shows how to use a ZlibStream to compress the data from a file,
+        /// and store the result into another file. The filestream remains open to allow
+        /// additional data to be written to it.
+        ///
+        /// <code>
+        /// using (var output = System.IO.File.Create(fileToCompress + ".zlib"))
+        /// {
+        ///     using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+        ///     {
+        ///         using (Stream compressor = new ZlibStream(output, CompressionMode.Compress, CompressionLevel.BestCompression, true))
+        ///         {
+        ///             byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+        ///             int n;
+        ///             while ((n= input.Read(buffer, 0, buffer.Length)) != 0)
+        ///             {
+        ///                 compressor.Write(buffer, 0, n);
+        ///             }
+        ///         }
+        ///     }
+        ///     // can write additional data to the output stream here
+        /// }
+        /// </code>
+        /// <code lang="VB">
+        /// Using output As FileStream = File.Create(fileToCompress &amp; ".zlib")
+        ///     Using input As Stream = File.OpenRead(fileToCompress)
+        ///         Using compressor As Stream = New ZlibStream(output, CompressionMode.Compress, CompressionLevel.BestCompression, True)
+        ///             Dim buffer As Byte() = New Byte(4096) {}
+        ///             Dim n As Integer = -1
+        ///             Do While (n &lt;&gt; 0)
+        ///                 If (n &gt; 0) Then
+        ///                     compressor.Write(buffer, 0, n)
+        ///                 End If
+        ///                 n = input.Read(buffer, 0, buffer.Length)
+        ///             Loop
+        ///         End Using
+        ///     End Using
+        ///     ' can write additional data to the output stream here.
+        /// End Using
+        /// </code>
+        /// </example>
+        ///
+        /// <param name="stream">The stream which will be read or written.</param>
+        ///
+        /// <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+        ///
+        /// <param name="leaveOpen">
+        /// true if the application would like the stream to remain open after
+        /// inflation/deflation.
+        /// </param>
+        ///
+        /// <param name="level">
+        /// A tuning knob to trade speed for effectiveness. This parameter is
+        /// effective only when mode is <c>CompressionMode.Compress</c>.
+        /// </param>
+        public ZlibStream(Stream stream, CompressionMode mode, CompressionLevel level, bool leaveOpen)
 		{
 			_baseStream = new ZlibBaseStream(stream, mode, level, ZlibStreamFlavor.ZLIB, leaveOpen);
 		}
@@ -327,54 +327,51 @@ namespace Ionic.Zlib
 		/// Sorry, though, not sure exactly how to describe all the various settings.
 		/// </summary>
 		public virtual FlushType FlushMode
-		{
-			get { return (this._baseStream._flushMode); }
-			set
-			{
-				if (_disposed) throw new ObjectDisposedException("ZlibStream");
-				this._baseStream._flushMode = value;
-			}
-		}
+        {
+            get => _baseStream._flushMode;
+            set
+            {
+                if (_disposed) throw new ObjectDisposedException("ZlibStream");
+                _baseStream._flushMode = value;
+            }
+        }
 
-		/// <summary>
-		///   The size of the working buffer for the compression codec.
-		/// </summary>
-		///
-		/// <remarks>
-		/// <para>
-		///   The working buffer is used for all stream operations.  The default size is
-		///   1024 bytes. The minimum size is 128 bytes. You may get better performance
-		///   with a larger buffer.  Then again, you might not.  You would have to test
-		///   it.
-		/// </para>
-		///
-		/// <para>
-		///   Set this before the first call to <c>Read()</c> or <c>Write()</c> on the
-		///   stream. If you try to set it afterwards, it will throw.
-		/// </para>
-		/// </remarks>
-		public int BufferSize
-		{
-			get
-			{
-				return this._baseStream._bufferSize;
-			}
-			set
-			{
-				if (_disposed) throw new ObjectDisposedException("ZlibStream");
-				if (this._baseStream._workingBuffer != null)
-					throw new ZlibException("The working buffer is already set.");
-				if (value < ZlibConstants.WorkingBufferSizeMin)
-					throw new ZlibException($"Don't be silly. {value} bytes?? Use a bigger buffer, at least {ZlibConstants.WorkingBufferSizeMin}.");
-				this._baseStream._bufferSize = value;
-			}
-		}
+        /// <summary>
+        ///   The size of the working buffer for the compression codec.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// <para>
+        ///   The working buffer is used for all stream operations.  The default size is
+        ///   1024 bytes. The minimum size is 128 bytes. You may get better performance
+        ///   with a larger buffer.  Then again, you might not.  You would have to test
+        ///   it.
+        /// </para>
+        ///
+        /// <para>
+        ///   Set this before the first call to <c>Read()</c> or <c>Write()</c> on the
+        ///   stream. If you try to set it afterwards, it will throw.
+        /// </para>
+        /// </remarks>
+        public int BufferSize
+        {
+            get => _baseStream._bufferSize;
+            set
+            {
+                if (_disposed) throw new ObjectDisposedException("ZlibStream");
+                if (_baseStream._workingBuffer != null)
+                    throw new ZlibException("The working buffer is already set.");
+                if (value < ZlibConstants.WorkingBufferSizeMin)
+                    throw new ZlibException($"Don't be silly. {value} bytes?? Use a bigger buffer, at least {ZlibConstants.WorkingBufferSizeMin}.");
+                _baseStream._bufferSize = value;
+            }
+        }
 
-		/// <summary> Returns the total number of bytes input so far.</summary>
-		public virtual long TotalIn => this._baseStream._z.TotalBytesIn;
+        /// <summary> Returns the total number of bytes input so far.</summary>
+        public virtual long TotalIn => _baseStream._z.TotalBytesIn;
 
 		/// <summary> Returns the total number of bytes output so far.</summary>
-		public virtual long TotalOut => this._baseStream._z.TotalBytesOut;
+		public virtual long TotalOut => _baseStream._z.TotalBytesOut;
 
 		#endregion
 
@@ -421,139 +418,119 @@ namespace Ionic.Zlib
 		}
 
 
-		/// <summary>
-		/// Indicates whether the stream can be read.
-		/// </summary>
-		/// <remarks>
-		/// The return value depends on whether the captive stream supports reading.
-		/// </remarks>
-		public override bool CanRead
-		{
-			get
-			{
-				if (_disposed) throw new ObjectDisposedException("ZlibStream");
-				return _baseStream._stream.CanRead;
-			}
-		}
+        /// <summary>
+        /// Indicates whether the stream can be read.
+        /// </summary>
+        /// <remarks>
+        /// The return value depends on whether the captive stream supports reading.
+        /// </remarks>
+        public override bool CanRead => _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream._stream.CanRead;
 
-		/// <summary>
-		/// Indicates whether the stream supports Seek operations.
-		/// </summary>
-		/// <remarks>
-		/// Always returns false.
-		/// </remarks>
-		public override bool CanSeek => false;
+        /// <summary>
+        /// Indicates whether the stream supports Seek operations.
+        /// </summary>
+        /// <remarks>
+        /// Always returns false.
+        /// </remarks>
+        public override bool CanSeek => false;
 
-		/// <summary>
-		/// Indicates whether the stream can be written.
-		/// </summary>
-		/// <remarks>
-		/// The return value depends on whether the captive stream supports writing.
-		/// </remarks>
-		public override bool CanWrite
-		{
-			get
-			{
-				if (_disposed) throw new ObjectDisposedException("ZlibStream");
-				return _baseStream._stream.CanWrite;
-			}
-		}
+        /// <summary>
+        /// Indicates whether the stream can be written.
+        /// </summary>
+        /// <remarks>
+        /// The return value depends on whether the captive stream supports writing.
+        /// </remarks>
+        public override bool CanWrite => _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream._stream.CanWrite;
 
-		/// <summary>
-		/// Flush the stream.
-		/// </summary>
-		public override void Flush()
+        /// <summary>
+        /// Flush the stream.
+        /// </summary>
+        public override void Flush()
 		{
 			if (_disposed) throw new ObjectDisposedException("ZlibStream");
 			_baseStream.Flush();
 		}
 
-		/// <summary>
-		/// Reading this property always throws a <see cref="NotSupportedException"/>.
-		/// </summary>
-		public override long Length
+        /// <summary>
+        /// Reading this property always throws a <see cref="NotSupportedException"/>.
+        /// </summary>
+        public override long Length => throw new NotSupportedException();
+
+        /// <summary>
+        ///   The position of the stream pointer.
+        /// </summary>
+        ///
+        /// <remarks>
+        ///   Setting this property always throws a <see
+        ///   cref="NotSupportedException"/>. Reading will return the total bytes
+        ///   written out, if used in writing, or the total bytes read in, if used in
+        ///   reading.  The count may refer to compressed bytes or uncompressed bytes,
+        ///   depending on how you've used the stream.
+        /// </remarks>
+        public override long Position
+        {
+            get
+            {
+                if (_baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Writer)
+                    return _baseStream._z.TotalBytesOut;
+                return _baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Reader ? _baseStream._z.TotalBytesIn : 0;
+            }
+
+            set => throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Read data from the stream.
+        /// </summary>
+        ///
+        /// <remarks>
+        ///
+        /// <para>
+        ///   If you wish to use the <c>ZlibStream</c> to compress data while reading,
+        ///   you can create a <c>ZlibStream</c> with <c>CompressionMode.Compress</c>,
+        ///   providing an uncompressed data stream.  Then call <c>Read()</c> on that
+        ///   <c>ZlibStream</c>, and the data read will be compressed.  If you wish to
+        ///   use the <c>ZlibStream</c> to decompress data while reading, you can create
+        ///   a <c>ZlibStream</c> with <c>CompressionMode.Decompress</c>, providing a
+        ///   readable compressed data stream.  Then call <c>Read()</c> on that
+        ///   <c>ZlibStream</c>, and the data will be decompressed as it is read.
+        /// </para>
+        ///
+        /// <para>
+        ///   A <c>ZlibStream</c> can be used for <c>Read()</c> or <c>Write()</c>, but
+        ///   not both.
+        /// </para>
+        ///
+        /// </remarks>
+        ///
+        /// <param name="buffer">
+        /// The buffer into which the read data should be placed.</param>
+        ///
+        /// <param name="offset">
+        /// the offset within that data array to put the first byte read.</param>
+        ///
+        /// <param name="count">the number of bytes to read.</param>
+        ///
+        /// <returns>the number of bytes read</returns>
+        public override int Read(byte[] buffer, int offset, int count)
 		{
-			get { throw new NotSupportedException(); }
-		}
+            return _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream.Read(buffer, offset, count);
+        }
 
-		/// <summary>
-		///   The position of the stream pointer.
-		/// </summary>
-		///
-		/// <remarks>
-		///   Setting this property always throws a <see
-		///   cref="NotSupportedException"/>. Reading will return the total bytes
-		///   written out, if used in writing, or the total bytes read in, if used in
-		///   reading.  The count may refer to compressed bytes or uncompressed bytes,
-		///   depending on how you've used the stream.
-		/// </remarks>
-		public override long Position
-		{
-			get
-			{
-				if (this._baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Writer)
-					return this._baseStream._z.TotalBytesOut;
-				if (this._baseStream._streamMode == Ionic.Zlib.ZlibBaseStream.StreamMode.Reader)
-					return this._baseStream._z.TotalBytesIn;
-				return 0;
-			}
-
-			set { throw new NotSupportedException(); }
-		}
-
-		/// <summary>
-		/// Read data from the stream.
-		/// </summary>
-		///
-		/// <remarks>
-		///
-		/// <para>
-		///   If you wish to use the <c>ZlibStream</c> to compress data while reading,
-		///   you can create a <c>ZlibStream</c> with <c>CompressionMode.Compress</c>,
-		///   providing an uncompressed data stream.  Then call <c>Read()</c> on that
-		///   <c>ZlibStream</c>, and the data read will be compressed.  If you wish to
-		///   use the <c>ZlibStream</c> to decompress data while reading, you can create
-		///   a <c>ZlibStream</c> with <c>CompressionMode.Decompress</c>, providing a
-		///   readable compressed data stream.  Then call <c>Read()</c> on that
-		///   <c>ZlibStream</c>, and the data will be decompressed as it is read.
-		/// </para>
-		///
-		/// <para>
-		///   A <c>ZlibStream</c> can be used for <c>Read()</c> or <c>Write()</c>, but
-		///   not both.
-		/// </para>
-		///
-		/// </remarks>
-		///
-		/// <param name="buffer">
-		/// The buffer into which the read data should be placed.</param>
-		///
-		/// <param name="offset">
-		/// the offset within that data array to put the first byte read.</param>
-		///
-		/// <param name="count">the number of bytes to read.</param>
-		///
-		/// <returns>the number of bytes read</returns>
-		public override int Read(byte[] buffer, int offset, int count)
-		{
-			if (_disposed) throw new ObjectDisposedException("ZlibStream");
-			return _baseStream.Read(buffer, offset, count);
-		}
-
-		/// <summary>
-		/// Calling this method always throws a <see cref="NotSupportedException"/>.
-		/// </summary>
-		/// <param name="offset">
-		///   The offset to seek to....
-		///   IF THIS METHOD ACTUALLY DID ANYTHING.
-		/// </param>
-		/// <param name="origin">
-		///   The reference specifying how to apply the offset....  IF
-		///   THIS METHOD ACTUALLY DID ANYTHING.
-		/// </param>
-		///
-		/// <returns>nothing. This method always throws.</returns>
-		public override long Seek(long offset, System.IO.SeekOrigin origin)
+        /// <summary>
+        /// Calling this method always throws a <see cref="NotSupportedException"/>.
+        /// </summary>
+        /// <param name="offset">
+        ///   The offset to seek to....
+        ///   IF THIS METHOD ACTUALLY DID ANYTHING.
+        /// </param>
+        /// <param name="origin">
+        ///   The reference specifying how to apply the offset....  IF
+        ///   THIS METHOD ACTUALLY DID ANYTHING.
+        /// </param>
+        ///
+        /// <returns>nothing. This method always throws.</returns>
+        public override long Seek(long offset, SeekOrigin origin)
 		{
 			throw new NotSupportedException();
 		}
@@ -601,28 +578,28 @@ namespace Ionic.Zlib
 			if (_disposed) throw new ObjectDisposedException("ZlibStream");
 			_baseStream.Write(buffer, offset, count);
 		}
-		#endregion
+        #endregion
 
 
-		/// <summary>
-		///   Compress a string into a byte array using ZLIB.
-		/// </summary>
-		///
-		/// <remarks>
-		///   Uncompress it with <see cref="ZlibStream.UncompressString(byte[])"/>.
-		/// </remarks>
-		///
-		/// <seealso cref="ZlibStream.UncompressString(byte[])"/>
-		/// <seealso cref="ZlibStream.CompressBuffer(byte[])"/>
-		/// <seealso cref="GZipStream.CompressString(string)"/>
-		///
-		/// <param name="s">
-		///   A string to compress.  The string will first be encoded
-		///   using UTF8, then compressed.
-		/// </param>
-		///
-		/// <returns>The string in compressed form</returns>
-		public static byte[] CompressString(String s)
+        /// <summary>
+        ///   Compress a string into a byte array using ZLIB.
+        /// </summary>
+        ///
+        /// <remarks>
+        ///   Uncompress it with <see cref="UncompressString(byte[])"/>.
+        /// </remarks>
+        ///
+        /// <seealso cref="UncompressString(byte[])"/>
+        /// <seealso cref="CompressBuffer(byte[])"/>
+        /// <seealso cref="GZipStream.CompressString(string)"/>
+        ///
+        /// <param name="s">
+        ///   A string to compress.  The string will first be encoded
+        ///   using UTF8, then compressed.
+        /// </param>
+        ///
+        /// <returns>The string in compressed form</returns>
+        public static byte[] CompressString(string s)
 		{
 			using (var ms = new MemoryStream())
 			{
@@ -634,23 +611,23 @@ namespace Ionic.Zlib
 		}
 
 
-		/// <summary>
-		///   Compress a byte array into a new byte array using ZLIB.
-		/// </summary>
-		///
-		/// <remarks>
-		///   Uncompress it with <see cref="ZlibStream.UncompressBuffer(byte[])"/>.
-		/// </remarks>
-		///
-		/// <seealso cref="ZlibStream.CompressString(string)"/>
-		/// <seealso cref="ZlibStream.UncompressBuffer(byte[])"/>
-		///
-		/// <param name="b">
-		/// A buffer to compress.
-		/// </param>
-		///
-		/// <returns>The data in compressed form</returns>
-		public static byte[] CompressBuffer(byte[] b)
+        /// <summary>
+        ///   Compress a byte array into a new byte array using ZLIB.
+        /// </summary>
+        ///
+        /// <remarks>
+        ///   Uncompress it with <see cref="UncompressBuffer(byte[])"/>.
+        /// </remarks>
+        ///
+        /// <seealso cref="CompressString(string)"/>
+        /// <seealso cref="UncompressBuffer(byte[])"/>
+        ///
+        /// <param name="b">
+        /// A buffer to compress.
+        /// </param>
+        ///
+        /// <returns>The data in compressed form</returns>
+        public static byte[] CompressBuffer(byte[] b)
 		{
 			using (var ms = new MemoryStream())
 			{
@@ -663,19 +640,19 @@ namespace Ionic.Zlib
 		}
 
 
-		/// <summary>
-		///   Uncompress a ZLIB-compressed byte array into a single string.
-		/// </summary>
-		///
-		/// <seealso cref="ZlibStream.CompressString(String)"/>
-		/// <seealso cref="ZlibStream.UncompressBuffer(byte[])"/>
-		///
-		/// <param name="compressed">
-		///   A buffer containing ZLIB-compressed data.
-		/// </param>
-		///
-		/// <returns>The uncompressed string</returns>
-		public static String UncompressString(byte[] compressed)
+        /// <summary>
+        ///   Uncompress a ZLIB-compressed byte array into a single string.
+        /// </summary>
+        ///
+        /// <seealso cref="CompressString(string)"/>
+        /// <seealso cref="UncompressBuffer(byte[])"/>
+        ///
+        /// <param name="compressed">
+        ///   A buffer containing ZLIB-compressed data.
+        /// </param>
+        ///
+        /// <returns>The uncompressed string</returns>
+        public static string UncompressString(byte[] compressed)
 		{
 			using (var input = new MemoryStream(compressed))
 			{
@@ -687,19 +664,19 @@ namespace Ionic.Zlib
 		}
 
 
-		/// <summary>
-		///   Uncompress a ZLIB-compressed byte array into a byte array.
-		/// </summary>
-		///
-		/// <seealso cref="ZlibStream.CompressBuffer(byte[])"/>
-		/// <seealso cref="ZlibStream.UncompressString(byte[])"/>
-		///
-		/// <param name="compressed">
-		///   A buffer containing ZLIB-compressed data.
-		/// </param>
-		///
-		/// <returns>The data in uncompressed form</returns>
-		public static byte[] UncompressBuffer(byte[] compressed)
+        /// <summary>
+        ///   Uncompress a ZLIB-compressed byte array into a byte array.
+        /// </summary>
+        ///
+        /// <seealso cref="CompressBuffer(byte[])"/>
+        /// <seealso cref="UncompressString(byte[])"/>
+        ///
+        /// <param name="compressed">
+        ///   A buffer containing ZLIB-compressed data.
+        /// </param>
+        ///
+        /// <returns>The data in uncompressed form</returns>
+        public static byte[] UncompressBuffer(byte[] compressed)
 		{
 			using (var input = new MemoryStream(compressed))
 			{

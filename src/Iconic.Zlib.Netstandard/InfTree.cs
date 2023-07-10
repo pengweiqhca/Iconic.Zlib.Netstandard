@@ -197,7 +197,7 @@ namespace Ionic.Zlib
 			while (--i != 0)
 			{
 				// note that i == g from above
-				x[xp] = (j += c[p]);
+				x[xp] = j += c[p];
 				xp++;
 				p++;
 			}
@@ -243,7 +243,7 @@ namespace Ionic.Zlib
 						{
 							// try a k-w bit table
 							// too few codes for k-w bit table
-							f -= (a + 1); // deduct codes from patterns left
+							f -= a + 1; // deduct codes from patterns left
 							xp = k;
 							if (j < z)
 							{
@@ -273,7 +273,7 @@ namespace Ionic.Zlib
 							x[h] = i; // save pattern for backing up
 							r[0] = (sbyte)j; // bits in this table
 							r[1] = (sbyte)l; // bits to dump before this table
-							j = SharedUtils.URShift(i, (w - l));
+							j = SharedUtils.URShift(i, w - l);
 							r[2] = (int)(q - u[h - 1] - j); // offset to this table
 							Array.Copy(r, 0, hp, (u[h - 1] + j) * 3, 3); // connect to last table
 						}
@@ -373,7 +373,7 @@ namespace Ionic.Zlib
 			initWorkArea(288);
 			result = huft_build(c, nl, nd, 0, cpdist, cpdext, td, bd, hp, hn, v);
 
-			if (result != Z_OK || (bd[0] == 0 && nl > 257))
+			if (result != Z_OK || bd[0] == 0 && nl > 257)
 			{
 				if (result == Z_DATA_ERROR)
 				{
