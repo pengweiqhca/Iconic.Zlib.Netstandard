@@ -27,10 +27,11 @@
 
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Ionic.Zlib
 {
-
     /// <summary>
     /// Represents a Zlib stream for compression or decompression.
     /// </summary>
@@ -512,10 +513,12 @@ namespace Ionic.Zlib
         /// <param name="count">the number of bytes to read.</param>
         ///
         /// <returns>the number of bytes read</returns>
-        public override int Read(byte[] buffer, int offset, int count)
-		{
-            return _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream.Read(buffer, offset, count);
-        }
+        public override int Read(byte[] buffer, int offset, int count) =>
+	        _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream.Read(buffer, offset, count);
+
+        /// <inheritdoc />
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken) =>
+	        _disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream.ReadAsync(buffer, offset, count, cancellationToken);
 
         /// <summary>
         /// Calling this method always throws a <see cref="NotSupportedException"/>.
@@ -578,8 +581,12 @@ namespace Ionic.Zlib
 			if (_disposed) throw new ObjectDisposedException("ZlibStream");
 			_baseStream.Write(buffer, offset, count);
 		}
-        #endregion
 
+		/// <inheritdoc />
+		public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken) =>
+			_disposed ? throw new ObjectDisposedException("ZlibStream") : _baseStream.WriteAsync(buffer, offset, count, cancellationToken);
+
+        #endregion
 
         /// <summary>
         ///   Compress a string into a byte array using ZLIB.

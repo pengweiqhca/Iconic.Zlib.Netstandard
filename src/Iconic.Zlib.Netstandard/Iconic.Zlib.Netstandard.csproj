@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <Authors>https://github.com/HelloKitty</Authors>
@@ -14,6 +13,6 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageId>Iconic.Zlib.Signed</PackageId>
     <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
+    <Version>1.1.0</Version>
   </PropertyGroup>
-
 </Project>
